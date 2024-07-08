@@ -1,0 +1,106 @@
+pip install virtual env
+virtualenv env
+pip install django
+env/scripts/activate.bat
+django-admin startproject fullstack
+cd fullstack
+python manage.py startapp listfruitapp
+python manage.py makemigration
+python manage.py migrate
+python manage.py runserver
+
+
+
+
+views.py 
+
+from django.shortcuts import render
+
+def home(request):
+    fruits = ['Apple', 'Banana', 'Orange', 'Mango', 'Pineapple']
+    students = ['John', 'Jane', 'Mike', 'Sarah', 'Tom']
+    context = {
+    'fruits': fruits,
+    'students': students,   
+    }
+    return render(request, 'home.html', context)
+
+
+templates 
+
+home.html
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fruits and Students</title>
+<!-- Add Bootstrap CSS -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+rel="stylesheet">
+<style>
+/* Center content vertically */
+html, body {
+height: 100%;
+}
+body {
+display: flex;
+justify-content: center;
+align-items: center;}
+.container {
+text-align: center;
+}
+/* Style for lists */
+.list-container {
+display: inline-block;
+margin: 0 20px; /* Add space between lists */
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="row">
+<div class="col">
+<h1>Fruits</h1>
+<ul class="list-group list-container">
+{% for fruit in fruits %}
+<li class="list-group-item">{{ fruit }}</li>
+{% endfor %}
+</ul>
+</div>
+<div class="col">
+<h1>Selected Students</h1>
+<ol class="list-group list-container">
+{% for student in students %}
+<li class="list-group-item">{{ student }}</li>
+{% endfor %}
+</ol>
+</div>
+</div>
+</div>
+</body>
+</html>
+
+system urls.py
+
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('listfruitapp.urls')),
+
+]
+
+urls.py in listfruitapp
+
+from django.urls import path
+from . import views
+urlpatterns = [
+    path('home/', views.home, name='home'),
+]
+
+settings.py
+
+INSTALLED APPS
+
+'listfruitapp'
